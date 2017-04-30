@@ -25,16 +25,11 @@ QState::QState(const QState &qs, size_t row) {
     } 
 
     unsigned int next_col = 0;
-    while(qs.column_has_queen(next_col)) {
+    while(column_has_queen(next_col)) {
         ++next_col;
     }    
     if (next_col < n) {
         this->board[next_col][row] = true;
-        printf("add row board\n");
-        print_state();
-    }
-    else {
-        printf("something went wrong\n");
     }
 }
 
@@ -51,6 +46,7 @@ bool QState::state_is_valid() const {
         if (queen_threats(col) > 0) {
             is_valid = false;
             break;
+            printf("state is not valid\n");
         }
     }
     return is_valid;
@@ -65,6 +61,7 @@ size_t QState::total_threats() const {
 }
 
 void QState::print_state() const {
+    printf("\n");
     for (unsigned int row = 0; row < n; ++row) {
         for (unsigned int col = 0; col < n; ++col) {
             if (board[col][row]) {
@@ -76,6 +73,7 @@ void QState::print_state() const {
         }
         printf("\n");
     }
+    printf("\n");
     
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdio>
 #include <vector>
 
 template <typename T>
@@ -51,10 +52,14 @@ template <typename T>
 TreeNode<T>* TreeNode<T>::get_next_unvisited_child() const {
     TNode* next = nullptr;
     for (auto &child: children) {
+        printf("we are visiting a child\n");
         if ( !child->is_visited() ) {
+            printf("we found one!!!!!!\n");
             next = child;
+            break;
         }
     }
+    next->get_data().print_state();
     return next;
 }
 

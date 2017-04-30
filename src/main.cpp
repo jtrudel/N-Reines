@@ -14,7 +14,6 @@ int main(int argc, char** argv) {
 
 void explore(TreeNode<QState>* node, size_t width) {
     node->visit();
-    node->get_data().print_state();
     if (node->get_data().state_is_valid() ) {
         if (node->get_data().valid_solution() ) {
             node->get_data().print_state(); 
@@ -29,11 +28,16 @@ void explore(TreeNode<QState>* node, size_t width) {
         }
     }
     auto next = node->get_next_unvisited_child();
+    if (next == nullptr) {
+        printf("WE HAVE A PROBLEM\n");
+    }
+    int i = 0;
     while(next not_eq nullptr) 
     {
-        std::cout<<"recursive call here"<<std::endl;
+        std::cout<<++i<<std::endl;
         explore(next, width);
         next = node->get_next_unvisited_child();
+        next->get_data().print_state();
     }
 }
     
