@@ -5,9 +5,9 @@
 
 class QState {
 public:
-    QState();
     QState(size_t N);
     QState(const QState &qs, size_t row);
+    QState(const QState &qs);
     ~QState();
 
     bool valid_solution() const;
@@ -17,6 +17,8 @@ public:
     void print_state() const;
 
 private:
+    QState();
+
     size_t n;
     std::vector<std::vector<bool> > board;
 

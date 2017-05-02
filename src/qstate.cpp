@@ -8,11 +8,13 @@ QState::QState() {
 
 QState::QState(size_t N) {
     n = N;
+
     std::vector<bool> row;
     row.resize(N);
     for (unsigned int col = 0; col < N; ++col) {
         row[col] = false;
     }
+
     for (unsigned int col = 0; col < n; ++col) {
         board.push_back(row);
     }
@@ -20,6 +22,7 @@ QState::QState(size_t N) {
 
 QState::QState(const QState &qs, size_t row) {
     this->n = qs.n;
+
     for (auto &row : qs.board) {
         board.push_back(row);
     } 
@@ -31,6 +34,14 @@ QState::QState(const QState &qs, size_t row) {
     if (next_col < n) {
         this->board[next_col][row] = true;
     }
+}
+
+QState::QState(const QState &qs) {
+    this->n = qs.n;
+
+    for (auto &row : qs.board) {
+        board.push_back(row);
+    } 
 }
 
 QState::~QState() {
@@ -46,7 +57,6 @@ bool QState::state_is_valid() const {
         if (queen_threats(col) > 0) {
             is_valid = false;
             break;
-            printf("state is not valid\n");
         }
     }
     return is_valid;
@@ -83,43 +93,64 @@ size_t QState::queen_threats(size_t col) const {
         threats += check_diagonals(col);
         threats += check_line(col);
     }
+    printf("threats %lu\n",threats);
     return threats;
 } 
 
 size_t QState::check_diagonals(size_t col) const {
     size_t threats = 0;
-    size_t row = get_queen_row(col);
-    for (unsigned int c = 0; c < n; ++c) {
-        int diff = c - col;
-        if ( c + diff < n and row + diff < n 
-            and board[c + diff][row + diff] )
-        {
-            ++threats;
-        }
-        if ( c - diff > 0 and row - diff > 0
-            and board[c - diff][row - diff] )
-        {
-            ++threats;
+    if (column_has_queen(col)) {
+        size_t row = get_queen_row(col);
+        for (unsigned int c = 0; c < n; ++c) {
+            if (c not_eq col) {
+                unsigned int diff = std::abs(
+                        static_cast<int>(c) - static_cast<int>(col) );
+                if ( col + diff < n and row + diff < n 
+                    and board[c + diff][row + diff] )
+                {
+                    ++threats;
+                }
+                if ( col - diff < n and row - diff < n
+                    and board[c - diff][row - diff] )
+                {
+                    ++threats;
+                }
+                if ( col - diff < n and row + diff < n 
+                    and board[c - diff][row + diff] )
+                {
+                    ++threats;
+                }
+                if ( col + diff < n and row - diff < n
+                    and board[c + diff][row - diff] )
+                {
+                    ++threats;
+                }
+            }
         }
     }
+    printf("diagonal %lu\n",threats);
     return threats;
 }
 
 size_t QState::check_line(size_t col) const {
-    size_t row = get_queen_row(col);
-    for (unsigned int c = 0; c < n; ++c) {
-        if (board[c][row] and c != col) {
-            ++row;
+    size_t threats = 0;
+    if (column_has_queen(col)) {
+        size_t row = get_queen_row(col);
+        for (unsigned int c = 0; c < n; ++c) {
+            if (board[c][row] and c != col) {
+                printf("c %lu, col %lu\n",c,col);
+                ++threats;
+            }
         }
     }
-    return row;
+    printf("line %lu\n",threats);
+    return threats;
 }
 
 bool QState::column_has_queen(size_t col) const {
     bool has_queen = false;
     for (unsigned int row = 0; row < n; ++row) {
         if (board[col][row]) {
-            printf("Has queen\n");
             has_queen = true;
             break;
         }

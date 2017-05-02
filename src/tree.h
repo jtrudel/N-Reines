@@ -16,10 +16,12 @@ public:
     TNode* get_next_unvisited_child() const;
     
     void add_child(TNode *const child);
+    void clear_children();
     
     void visit() { visited = true; }
     bool is_visited() const { return visited; }
 
+    size_t child_number() const { return children.size(); }
 private:
     TreeNode();
     TreeNode(const TNode &) {};
@@ -32,9 +34,9 @@ private:
 };
 
 template <typename T>
-TreeNode<T>::TreeNode(TNode *const parent_, T data_) {
+TreeNode<T>::TreeNode(TNode *const parent_, T data_)
+        : data(data_) {
     parent = parent_;
-    data = data_;
     visited = false;
 }
 
@@ -52,18 +54,24 @@ template <typename T>
 TreeNode<T>* TreeNode<T>::get_next_unvisited_child() const {
     TNode* next = nullptr;
     for (auto &child: children) {
-        printf("we are visiting a child\n");
         if ( !child->is_visited() ) {
-            printf("we found one!!!!!!\n");
             next = child;
             break;
         }
     }
-    next->get_data().print_state();
     return next;
 }
 
 template <typename T>
 void TreeNode<T>::add_child(TNode *const child) {
     children.push_back(child);
+}
+
+template <typename T>
+void TreeNode<T>::clear_children() {
+    if (children.size() > 0) {
+        for (auto &child : children) {
+            delete child;
+        }
+    }
 }
