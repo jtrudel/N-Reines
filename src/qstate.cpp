@@ -93,7 +93,6 @@ size_t QState::queen_threats(size_t col) const {
         threats += check_diagonals(col);
         threats += check_line(col);
     }
-    printf("threats %lu\n",threats);
     return threats;
 } 
 
@@ -106,29 +105,28 @@ size_t QState::check_diagonals(size_t col) const {
                 unsigned int diff = std::abs(
                         static_cast<int>(c) - static_cast<int>(col) );
                 if ( col + diff < n and row + diff < n 
-                    and board[c + diff][row + diff] )
+                    and board[col + diff][row + diff] )
                 {
                     ++threats;
                 }
                 if ( col - diff < n and row - diff < n
-                    and board[c - diff][row - diff] )
+                    and board[col - diff][row - diff] )
                 {
                     ++threats;
                 }
                 if ( col - diff < n and row + diff < n 
-                    and board[c - diff][row + diff] )
+                    and board[col - diff][row + diff] )
                 {
                     ++threats;
                 }
                 if ( col + diff < n and row - diff < n
-                    and board[c + diff][row - diff] )
+                    and board[col + diff][row - diff] )
                 {
                     ++threats;
                 }
             }
         }
     }
-    printf("diagonal %lu\n",threats);
     return threats;
 }
 
@@ -138,12 +136,10 @@ size_t QState::check_line(size_t col) const {
         size_t row = get_queen_row(col);
         for (unsigned int c = 0; c < n; ++c) {
             if (board[c][row] and c != col) {
-                printf("c %lu, col %lu\n",c,col);
                 ++threats;
             }
         }
     }
-    printf("line %lu\n",threats);
     return threats;
 }
 

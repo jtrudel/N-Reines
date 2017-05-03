@@ -31,7 +31,6 @@ void explore(TreeNode<QState>* node, size_t width) {
     while(next not_eq nullptr) 
     {
         explore(next, width);
-        next->get_data().print_state();
         next = node->get_next_unvisited_child();
     }
     node->clear_children();
